@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float jumpForce = 10f;
+    public float gravityScale = 1f;
     public LayerMask coloredWallMask;
     public LayerMask neutralWallMask;
 
@@ -26,7 +27,10 @@ public class PlayerController : MonoBehaviour
     public CubeFace[] faces = new CubeFace[4];
 
 
-    void Start() => rb = GetComponent<Rigidbody2D>();
+    void Start() { 
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = gravityScale;
+    }
 
     void Update()
     {
@@ -47,9 +51,11 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        UnstickFromWall();
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         canJump = false;
     }
+
 
     void RotateFacesLeft()
     {
@@ -109,7 +115,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isSticking)
         {
-            rb.gravityScale = 1f;
+            rb.gravityScale = gravityScale;
             isSticking = false;
         }
     }
